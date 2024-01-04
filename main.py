@@ -1,19 +1,18 @@
-print('Hello')
+import os
+import sys
+from wsgiref import simple_server
 
 
-import http.server as s
+def app(environ, start_response):
+    start_response("200 OK", [
+        ("Content-type", "text/plain; charset=utf-8"),
+        ("Version", sys.version.split()[0]),
+    ])
+    return [b"Hello"]
 
 
-class H(s.BaseHTTPRequestHandler):
-    def do_GET(self):
-        print(self.__dict__)
-        self.wfile.write(bytes('Hello World!', 'utf-8'))
-
-
-with s.ThreadingHTTPServer(('0.0.0.0', 8080), RequestHandlerClass=H) as h:
-    print(h.socket.getsockname())
-    try:
-        h.serve_forever()
-    except KeyboardInterrupt:
-        print("\nKeyboard interrupt received, exiting.")
-        exit(0)
+simple_server.ServerHandler.server_software = ""
+port = int(os.environ.get("PORT", 8080))
+with simple_server.make_server(host="", port=port, app=app) as httpd:
+    print(f"Serving on port {port}...")
+    httpd.serve_forever()
