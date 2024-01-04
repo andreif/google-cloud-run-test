@@ -6,7 +6,8 @@ import http.server as s
 
 class H(s.BaseHTTPRequestHandler):
     def do_GET(self):
-        print(self.path)
+        print(self.__dict__)
+        self.wfile.write(bytes('Hello World!', 'utf-8'))
 
 
 with s.ThreadingHTTPServer(('0.0.0.0', 8080), RequestHandlerClass=H) as h:
