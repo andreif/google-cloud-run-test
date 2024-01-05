@@ -6,4 +6,4 @@ COPY . /app
 EXPOSE 8080
 # ENV NAME World
 
-CMD ["python", "main.py"]
+ENTRYPOINT ["python", "main.py"]
